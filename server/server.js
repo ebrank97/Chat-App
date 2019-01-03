@@ -12,17 +12,17 @@ let io = socketIO(server);
 
 app.use(express.static(publicPath));
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
   console.log('New user connected');
-
-  socket.emit('newMessage', {
-    from: 'Ebran',
-    text: 'Hello there!',
-    createdAt: new Date().getHours().toString()
-  });
 
   socket.on('createMessage', (message) => {
     console.log('Create Message', message);
+    
+    io.emit('newMessage', {
+        from: message.from,
+        text: message.text,
+        createdAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect', () => {
