@@ -12,17 +12,24 @@ let io = socketIO(server);
 
 app.use(express.static(publicPath));
 
-io.on('connection', (socket) => {
-    console.log('New user connected');
+io.on('connection', socket => {
+  console.log('New user connected');
 
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
-    });
+  socket.emit('newMessage', {
+    from: 'Ebran',
+    text: 'Hello there!',
+    createdAt: new Date().getHours().toString()
+  });
+
+  socket.on('createMessage', (message) => {
+    console.log('Create Message', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
 });
 
 server.listen(port, () => {
-    console.log(`The server is started on the port ${port}`);
+  console.log(`The server is started on the port ${port}`);
 });
-
-
-
