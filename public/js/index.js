@@ -18,10 +18,31 @@ socket.on('newMessage', function(message) {
 });
 
 jQuery('#message-form').on('submit', function(e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    socket.emit('createMessage', {
-        from: 'User',
-        text: jQuery('[name=message]').val()
-    }, function() {});
+  socket.emit(
+    'createMessage',
+    {
+      from: 'User',
+      text: jQuery('[name=message]').val()
+    },
+    function() {}
+  );
+});
+
+var locationButton = jQuery('#send-location');
+locationButton.on('click', function() {
+  if (!navigator.geolocation) {
+    alert('Geolocation is not supported in your browser');
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      console.log('Sending the location');
+      console.log(position);
+    },
+    function() {
+      alert('Unable to fetch location');
+    }
+  );
 });
